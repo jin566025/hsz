@@ -1,25 +1,28 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-class App extends Component {
+import React from 'react';
+import Header from './components/header'
+import List from './components/list'
+import Navs from './components/navs'
+class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { items: [0,0,0,0],currentIndex:1};
+	}
+	cancel(index){
+		this.setState({
+			currentIndex:index
+		})
+	}
+	toTop(index){
+		this.setState({
+			currentIndex:999
+		})
+	}
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="content">
+				 <Header />
+				 <Navs />
+				 <List toTop={flag=>this.toTop(flag)}  cancel={mode=>this.cancel(mode)} items={this.state.items} currentIndex={this.state.currentIndex} />
       </div>
     );
   }
