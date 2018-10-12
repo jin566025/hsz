@@ -19,17 +19,20 @@
 
 .container{
 	width: 704rem/@base;height: 550rem/@base;border-radius: 5px;background-color: #fff;margin: 0 auto;z-index: 2;position: relative;box-shadow: 0 0 5px #999;
-	.banner{width: 648rem/@base;height:400rem/@base;margin: 20rem/@base;margin-bottom: 15rem/@base;}
+	.banner{
+		width: 648rem/@base;height:400rem/@base;margin: 20rem/@base;margin-bottom: 15rem/@base;padding-top:20rem/@base;
+		.banner-img{width: 648rem/@base;height:400rem/@base;}
+	}
 	.banner-content{
-		width: 648rem/@base;margin: 0 auto;
+		width: 648rem/@base;margin: 0 auto;padding-top: 20rem/@base;
 		.banner-content-left{
 			.banner-title{font-size: 37rem/@base;color: #000;height: 40rem/@base;line-height: 40rem/@base;margin-bottom: 10rem/@base;}
-			.banner-title2{font-size: 24rem/@base;color: #000;}
+			.banner-title2{font-size: 24rem/@base;color: #000;margin-bottom: 0;}
 		}
 		.banner-content-right{
 			padding-left: 20rem/@base;border-left: 1px solid #000;text-align: center;
 			.banner-title3{font-size: 24rem/@base;color: #000;height: 40rem/@base;line-height: 40rem/@base;margin-bottom: 10rem/@base;}
-			.banner-title4{font-size: 24rem/@base;color: #000;}
+			.banner-title4{font-size: 24rem/@base;color: #000;margin-bottom: 0;}
 		}
 	}
 }
@@ -40,7 +43,7 @@
 .list-navs{
 	height: 80rem/@base;line-height: 80rem/@base;border-bottom: 1px solid #F2F2F2;margin-bottom: 20rem/@base;
 	.list-nav{text-align: center;width: 33.333333333333333%;color: #333;font-size: 30rem/@base;}
-	.list-nav-active{border-bottom: 2px solid #CE3B27;}
+	.active{border-bottom: 2px solid #CE3B27;}
 }
 
 .item{
@@ -65,11 +68,11 @@
 				.item-msg-age{margin-right: 40rem/@base;}
 			}
 			.item-msg2{
-				font-size: 26rem/@base;color: #200c0c;margin-top: 20rem/@base;
+				font-size: 26rem/@base;color: #200c0c;margin-top: 20rem/@base;margin-bottom: 0;
 				.item-msg-price{margin-left: 20rem/@base;color: #CD3C29;}
 			}
 			.item-more{
-				text-align: right;cursor: pointer;color: #CF3A24;font-size: 24rem/@base;
+				text-align: right;cursor: pointer;color: #CF3A24;font-size: 24rem/@base;margin-bottom: 0;
 				.top-icon{width: 20rem/@base;margin-right: 5px;}
 			}
 		}
@@ -83,4 +86,14 @@
 		}
 	}
 	
+}
+
+
+.progress-section{
+	.progress-section-left{
+		width: 648rem/@base;margin: 0 auto;
+	}
+	.progress-section-right{
+		margin-left: 20rem/@base;
+	}
 }

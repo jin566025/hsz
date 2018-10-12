@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Carousel } from 'antd';
 class Header extends  React.Component{
 	render(){
 		return (
@@ -7,7 +7,13 @@ class Header extends  React.Component{
 				<div className="shadow"></div>
 				<input className="search box-sizing" placeholder="请输入编号" type="text" />
 				<div className="container">
-					<img  alt="" className="banner" src="./img/test.png" />
+					<div  className="banner">
+						<Carousel autoplay  effect="fade">
+							<div><img alt="" className="banner-img" src="/img/test.png"  / ></div>
+							<div><img alt="" className="banner-img" src="/img/test2.png"  / ></div>
+							<div><img alt="" className="banner-img" src="/img/test.png"  / ></div>
+					  </Carousel>
+					</div>
 					<div className="banner-content clearfix">
 						<div className="banner-content-left fl">
 							<p className="banner-title">"博爱甬城助您黔程"结对助学</p>
