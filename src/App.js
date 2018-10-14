@@ -1,28 +1,21 @@
 import React from 'react';
 import Header from './components/header'
 import Navs from './components/navs'
-
+import Footer from './components/footer'
 class App extends React.Component {
-	
-	state = {
-			data: ['1', '2', '3'],
-			imgHeight: 176,
-		}
-		componentDidMount() {
-			// simulate img loading
-			setTimeout(() => {
-				this.setState({
-					data: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI'],
-				});
-			}, 100);
-		}
+
+	componentDidMount(){
+		
+	}
+
   render() {
     return (
       <div className="content">
 			
-				 <Header />
-				 <Navs  history ={this.props.history}  />
+				<Header />
+				<Navs  history ={this.props.history}  />
 				 
+				<Footer></Footer>
 				
       </div>
     );

@@ -208,6 +208,6 @@
 .initial-flex{flex: initial;-ms-flex: initial;-webkit-flex:initial;-moz-box-flex:initial;-webkit-box-flex:initial}
 .just-center{justify-content: center;-webkit-justify-content: center;}
 .align-center{align-items:center;-webkit-align-items: center;}
-
+.absolute-center{top: 50%;left: 50%;transform: translateX(-50%) translateY(-50%);-moz-transform:  translateX(-50%) translateY(-50%);-webkit-transform: translateX(-50%) translateY(-50%);-ms-transform: translateX(-50%) translateY(-50%);}
 .hide{display: none;}
 .show{display: block;}
