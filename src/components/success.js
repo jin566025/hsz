@@ -6,11 +6,11 @@ class success extends React.Component{
 		this.state = { number:0 };
 	}
 	componentDidMount(){
-		this.count(this.props.donaername);
-		console.log(this.props.bianhao)
+
+		
 	}
 	count(name){
-		axios.get('/hh/rcprorecord/count').then(res=>{
+		axios.get('/hh/rcprorecord/count?name='+name).then(res=>{
 			console.log(res)
 			if(res.status===200){
 				let _number = 0;
@@ -29,7 +29,7 @@ class success extends React.Component{
 				<div className="success-content absolute-center">
 					<div className="success">
 						<div className="success-name" style={ this.props.donaername ? {display: 'block'} : { display: 'none'} }>{ this.props.donaername}</div>
-						<div className="success-text" style={ this.props.donaername ? {display: 'block'} : { display: 'none'} }>您已成功捐助{this.state.number}位学生</div>
+						<div className="success-text" style={ this.props.donaername ? {display: 'block'} : { display: 'none'} }>您已成功捐助{this.props.number}位学生</div>
 						<div className="success-title">"博爱甬城·助您黔程"甬城名都,助学·筑梦·筑人</div>
 						<img className="success-img" src="./img/success.jpg" alt="" />
 						<div className="erweima-content flex-box">

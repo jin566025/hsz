@@ -2,10 +2,11 @@ import React from 'react'
 import Success from './success'
 import axios from '../axios/index'
 import $ from "jquery"
+let wx = require('weixin-js-sdk');
 class dialog extends React.Component{
 	constructor(props) {
 		super(props);
-		this.state = { dislog:false,success:false,donaername:"" };
+		this.state = { dislog:false,success:false,donaername:"",number:0 };
 		this.tabCheck = this.tabCheck.bind(this);
 		this.donation = this.donation.bind(this);
 	}
@@ -22,24 +23,8 @@ class dialog extends React.Component{
 			return false;
 		}
 	}
-	aliPay(tel,name,address,amount,pk){
+	aliPay(params,tel,name,address,amount,pk){
 		
-		let params = {
-			"cd":"HH_ALIPAY",
-			"subject":"child",
-			"totalAmount":amount,
-			"rcProPk":"4101218502661120",
-			"rcProChildPk":pk,
-		}
-		let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
-		if(phoneReg.test(tel)){
-			params.phone=tel
-		}else{
-			alert("请输入有效的手机号码！");
-			return false;
-		}
-		name ? params.name = name:params.name = "未填";
-		address ? params.addr = address:params.address = "未填";
 		
 		
 		let that = this;
@@ -54,20 +39,52 @@ class dialog extends React.Component{
 				if(res.status==="200"){
 					
 					that.checkOrder(res.data.outTradeNo,name)
-					//window.location.href=res.data.qrCode
+					window.location.href=res.data.qrCode
 				}
 			}
 		})
-// 		axios({
-// 			url:'/pay/alipay/createOrder',
-// 			type:'POST',
-// 			data:params,
-// 			dataType:'json'
-// 		}).then(res=>{
-// 			console.log(res)
-// 
-// 		})
-
+	}
+	weixinPay(params){
+		let _params = {};
+		
+		_params.cd = params.cd;
+		_params.totalFee = params.totalAmount;
+		_params.phone = params.phone;
+		_params.name = params.name;
+		_params.array = params.array;
+		_params.rcProPk = params.rcProPk;
+		_params.body = params.subject
+		
+		_params.openid = sessionStorage.getItem("openid");
+		_params.tradeType = "JSAPI";
+		
+		$.ajax({
+			type:"post",
+			url:"http://nbhh.xlylai.com/pay/weixin/createOrder",
+			data:_params,
+			async:false,
+			success:function(res){
+				console.log(res)
+				if(res.status==="200"){
+// 					WeixinJSBridge.invoke(
+// 						'getBrandWCPayRequest', {
+// 							"appId":res.appId,               //公众号名称，由商户传入     
+// 							"timeStamp":res.timeStamp,       //时间戳，自1970年以来的秒数     
+// 							"nonceStr":res.nonceStr,         //随机串     
+// 							"package":res.packageValue,     
+// 							"signType":res.signType,         //微信签名方式：     
+// 							"paySign":res.paySign               //微信签名 
+// 						},
+// 						function(res){
+// 							console.log(res)
+// 							if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+// 								//that.checkOrder(ordNo,name)
+// 							}
+// 						}
+// 					); 
+				}
+			}
+		})
 	}
 	checkOrder(ordNo,name){
 		let query = {"w":[{"k":"ordNo","v":ordNo,"m":"LK"}],"o":[],"p":{"n":1,"s":10}};
@@ -76,39 +93,73 @@ class dialog extends React.Component{
 		let that = this;
 		$.ajax({
 			type:"get",
-			url:"http://nbhh.xlylai.com:8812/hh/rcprorecord/page?query="+query,
+			url:"http://nbhh.xlylai.com/hh/rcprorecord/page?query="+query,
 			async:false,
 			success:function(data){
+				
 				if(data.status==200){
-					if(data.data.items[0].statNm=="订单未支付"){
-						setTimeout(()=>{
-							that.checkOrder(ordNo,name)
-						},3000)
-					}else{
+					console.log(data)
+					if(data.data.items[0]){
 						that.setState({
 							success:true,
 							donaername:name
 						})
+					}else{
+						setTimeout(()=>{
+							that.checkOrder(ordNo,name)
+						},3000)
 					}
 				}
 			}
 		})
+		$.ajax({
+			type:"get",
+			url:"http://nbhh.xlylai.com/hh/rcprorecord/count?name="+name,
+			async:false,
+			success:function(data){
+				let _number = 0;
+				data ? _number=data:_number = 0;
+				that.setState({
+					number:_number
+				})
+			}
+		})
 	}
+
 	donation(){
 		let tel = this.refs.tel.value;
 		let name = this.refs.name.value;
 		let address = this.refs.address.value;
+		let pk = this.props.pk.join(",");
+		let params = {
+			"cd":"HH_ALIPAY",
+			"subject":"child",
+			"totalAmount":this.props.amount,
+			"rcProPk":"4101218502661120",
+			"array":pk,
+		}
+		console.log()
+		let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+		if(phoneReg.test(tel)){
+			params.phone=tel
+		}else{
+			alert("请输入有效的手机号码！");
+			return false;
+		}
+		name ? params.name = name:params.name = "未填";
+		address ? params.addr = address:params.address = "未填";
 		
 		if(this.isWeixn()){
-			
+			this.weixinPay(params)
 		}else{
-			this.aliPay(tel,name,address,this.props.amount,this.props.pk)
+			this.aliPay(params,tel,name,address,this.props.amount,this.props.pk)
 		}
 	}
 	closeDialog(){
 		this.setState({
 			success:false
 		})
+		window.location.reload();
 	}
 	render(){
 		return(
@@ -137,7 +188,7 @@ class dialog extends React.Component{
 						
 					</div>
 				</div>
-				<Success donaername={this.state.donaername} closeDialog={()=>this.closeDialog()} success={this.state.success}></Success>
+				<Success number={this.state.number} donaername={this.state.donaername} closeDialog={()=>this.closeDialog()} success={this.state.success}></Success>
 			</div>
 		)
 	}
