@@ -48,7 +48,7 @@ class dialog extends React.Component{
 		let _params = {};
 		
 		_params.cd = params.cd;
-		_params.totalFee = params.totalAmount;
+		_params.totalFee =parseFloat(params.totalAmount)*100;
 		_params.phone = params.phone;
 		_params.name = params.name;
 		_params.array = params.array;
@@ -81,7 +81,23 @@ class dialog extends React.Component{
 						  paySign: res.data.paySign, // 支付签名
 						  // appId:res.data.appId,
 						  success: function (result) {
-							that.checkOrder(res.data.ordNo,params.name)
+						  that.setState({
+							  success:true,
+							  donaername:params.name
+						  })
+						  
+							$.ajax({
+								type:"get",
+								url:"http://nbhh.xlylai.com/hh/rcprorecord/count?name="+params.name,
+								async:false,
+								success:function(data){
+									let _number = 0;
+									data ? _number=data:_number = 0;
+									that.setState({
+										number:_number
+									})
+								}
+							})
 						  }
 					  });
 
@@ -149,8 +165,8 @@ class dialog extends React.Component{
 			alert("请输入有效的手机号码！");
 			return false;
 		}
-		name ? params.name = name:params.name = "未填";
-		address ? params.addr = address:params.address = "未填";
+		name ? params.name = name:params.name="";
+		address ? params.addr = address:params.name="";
 		
 		if(this.isWeixn()){
 			this.weixinPay(params)
