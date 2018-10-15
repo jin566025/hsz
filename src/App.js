@@ -20,12 +20,20 @@ class App extends React.Component {
 			let openid = sessionStorage.getItem("openid");
 			if(hasLogin){
 				let _url = window.location.href.split("code=")[1];
-				console.log(_url)
-				let code = _url.split("&")[0];
-				axios.get('/weixin/access/login?code='+code).then(res=>{
-					console.log(res)
-					sessionStorage.setItem("openid",res.data.openid);
-				})
+				console.log(openid)
+				if(openid){
+					
+				}else{
+					let code = _url.split("&")[0];
+					setTimeout(()=>{
+						axios.get('/weixin/access/login?code='+code).then(res=>{
+							console.log(res)
+							sessionStorage.setItem("openid",res.data.openid);
+						})
+					},2000)
+				}
+				
+				
 			}else{
 				window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb9a1996af082db32&redirect_uri=http://nbhhweb.xlylai.com/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
 				sessionStorage.setItem("hasLogin",true)
