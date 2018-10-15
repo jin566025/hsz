@@ -14,13 +14,13 @@ class ListItem extends React.Component{
 					<div className="item-content-right flex1">
 						<div className="item-content-name flex-box">
 							<p className="item-name  flex1">{this.props.items.childNo} {this.props.items.rcProChildName} </p>
-							<div style={ this.props.checkindex===this.props.index ? {backgroundColor: '#CE3B27'} : { backgroundColor: '#999'} }  className={`item-check  ${this.props.items.statNm==="未完成" ? 'show' : 'hide'}`} onClick={()=>{this.props.checkChild(this.props.items.rcProChildPk,this.props.items.amount,this.props.index)}}></div>
+							<div style={ this.props.items.check ? {backgroundColor: '#CE3B27'} : { backgroundColor: '#999'} }  className={`item-check  ${this.props.items.statNm==="未完成" ? 'show' : 'hide'}`} onClick={()=>{this.props.checkChild(this.props.items.rcProChildPk,this.props.items.amount,this.props.index)}}></div>
 							<div className={`item-check2  ${this.props.items.statNm==="未完成" ? 'hide' : 'show'}`}>已结对</div>
 						</div>
 						
 						<p className="item-msg">
 							<span className="item-msg-age">年龄：{this.props.items.age}岁</span>
-							<span>性别：{this.props.items.sex===1 ? `男`:`女`}</span>
+							<span>性别：{this.props.items.sex==="1" ? `男`:`女`}</span>
 						</p>
 						<p className="item-msg">{this.props.items.proNm} {this.props.items.cityNm} {this.props.items.school}</p>
 						<p className="item-msg2">捐助金额<span className="item-msg-price">{this.props.items.amount}元</span></p>

@@ -55,7 +55,7 @@
 .container .banner {
   width: 8.64rem;
   height: 5.333333333333333rem;
-  margin: 0.26666666666666666rem;
+  margin: 0.26666666666666666rem auto;
   margin-bottom: 0.2rem;
   padding-top: 0.26666666666666666rem;
 }
@@ -309,7 +309,7 @@
 }
 .footer .footer-right {
   width: 50%;
-  position: relative;
+  position: relative;padding-left: 10px;
 }
 .footer .footer-right:after {
   position: absolute;
@@ -373,7 +373,7 @@
   top: 0;
   width: 10rem;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 900;
 }
 .dialog-content {
@@ -539,4 +539,12 @@
 .success-content .save .save-close {
   width: 0.5333333333333333rem;
   height: 0.5333333333333333rem;
+}
+
+.to-top{position: fixed;right: 10px;bottom: 30%;width: 0.8rem;height: 0.8rem;border-radius: 50%;background-color: #999;z-index: 222;text-align: center;line-height: 0.7rem;color: #fff;font-size: 0.6rem;font-weight: bold;}
+
+@media screen and (max-width: 320px) {
+   .container .banner-content .banner-content-right{
+		 padding-left: 0;
+	 }
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Success from './success'
-import axios from '../axios/index';
+import axios from '../axios/index'
+import $ from "jquery"
 class dialog extends React.Component{
 	constructor(props) {
 		super(props);
@@ -39,29 +40,59 @@ class dialog extends React.Component{
 		}
 		name ? params.name = name:params.name = "未填";
 		address ? params.addr = address:params.address = "未填";
-
-		axios({
-			url:'/pay/alipay/createOrder',
-			type:'post',
+		
+		
+		let that = this;
+		
+		$.ajax({
+			type:"post",
+			url:"http://nbhh.xlylai.com/pay/alipay/createOrder",
 			data:params,
-			dataType:'json'
-		}).then(res=>{
-			console.log(res)
-			if(res.status===200){
-				this.setState({
-					success:true,
-					donaername:name
-				})
-				if(res.data.status=="401"){
+			async:false,
+			success:function(res){
+				console.log(res)
+				if(res.status==="200"){
 					
-				}else{
+					that.checkOrder(res.data.outTradeNo,name)
 					//window.location.href=res.data.qrCode
 				}
-				//
-				
 			}
 		})
+// 		axios({
+// 			url:'/pay/alipay/createOrder',
+// 			type:'POST',
+// 			data:params,
+// 			dataType:'json'
+// 		}).then(res=>{
+// 			console.log(res)
+// 
+// 		})
 
+	}
+	checkOrder(ordNo,name){
+		let query = {"w":[{"k":"ordNo","v":ordNo,"m":"LK"}],"o":[],"p":{"n":1,"s":10}};
+		query = JSON.stringify(query);
+		query = encodeURI(query);
+		let that = this;
+		$.ajax({
+			type:"get",
+			url:"http://nbhh.xlylai.com:8812/hh/rcprorecord/page?query="+query,
+			async:false,
+			success:function(data){
+				if(data.status==200){
+					if(data.data.items[0].statNm=="订单未支付"){
+						setTimeout(()=>{
+							that.checkOrder(ordNo,name)
+						},3000)
+					}else{
+						that.setState({
+							success:true,
+							donaername:name
+						})
+					}
+				}
+			}
+		})
 	}
 	donation(){
 		let tel = this.refs.tel.value;

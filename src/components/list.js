@@ -6,7 +6,7 @@ import emitter from "./event"
 class List extends React.Component{
 	constructor(props) {
 		super(props);
-		this.state = { rcprochild: [],currentindex:999,visible:false,checkindex:999,hasCheck:false,pk:0,amount:0};
+		this.state = { rcprochild: [],currentindex:999,visible:false,checkindex:999,hasCheck:false,pk:[],amount:0};
 		this.submitgo = this.submitgo.bind(this);
 	}
 	cancel(index){
@@ -48,28 +48,50 @@ class List extends React.Component{
 	rcprochild(){
 		axios.get('/hh/rcprochild/list').then(res=>{
 			if(res.status===200){
+				let items = res.data.data.items;
+				items.forEach((ele,i)=>{
+					ele.check = false;
+				})
 				this.setState({
-					rcprochild:res.data.data.items
+					rcprochild:items
 				})
 			}
 		})
 	}
 	checkChild(pk,amount,index){
-		if(this.state.hasCheck){
-			this.setState({
-				checkindex:999,
-				hasCheck:false
-			})
+// 		
+// 		if(this.state.rcprochild[index].check){
+// 			
+// 		}else{
+// 			this.setState({
+// 				checkindex:index,
+// 				pk:pk,
+// 				amount:amount
+// 			})
+// 		}
+		let price = amount;
+		let _amount = this.state.amount;
+		let pks = this.state.pk;
+		let _index = pks.indexOf(pk);
+		let hasCheck  = this.state.hasCheck;
+		if(this.state.rcprochild[index].check){
+			pks.splice(_index,1);
+			_amount = _amount-price;
+			if(pks.length==0){
+				hasCheck=false
+			}
 		}else{
-			this.setState({
-				checkindex:index,
-				hasCheck:true,
-				pk:pk,
-				amount:amount
-			})
+			_amount = _amount+price;
+			pks.push(pk);
+			hasCheck=true
 		}
-		
-
+		this.state.rcprochild[index].check = !this.state.rcprochild[index].check;
+		this.setState({
+			rcprochild:this.state.rcprochild,
+			pk:pks,
+			amount:_amount,
+			hasCheck:hasCheck
+		})
 	}
 
 	render(){
