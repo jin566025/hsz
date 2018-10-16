@@ -55,7 +55,7 @@ class dialog extends React.Component{
 		_params.rcProPk = params.rcProPk;
 		_params.body = params.subject
 		
-		_params.openid = sessionStorage.getItem("openid");
+		_params.openid = localStorage.getItem("openid");
 		_params.tradeType = "JSAPI";
 		let that = this;
 		$.ajax({

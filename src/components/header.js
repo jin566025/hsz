@@ -23,7 +23,7 @@ class Header extends  React.Component{
 		})
 	}
 	rcprochild(){
-		axios.get('/hh/rcprochild/page').then(res=>{
+		axios.get('/hh/rcprochild/list').then(res=>{
 				if(res.status===200){
 					let lists = res.data.data.items;
 					let length = 0;
@@ -42,11 +42,18 @@ class Header extends  React.Component{
 		
 	}
 	changeEvent(e){
-		console.log();
-				let query = {"w":[{"k":"childNo","v":e.target.value,"m":"LK"}],"o":[],"p":{"n":1,"s":10}};
-				query = JSON.stringify(query);
-				query = encodeURI(query)
-				axios.get('/hh/rcprochild/page?query='+query).then(res=>{
+		console.log(e.target.value);
+				let value= e.target.value;
+				let url = '/hh/rcprochild/list'
+				let query = "";
+				if(value){
+					query = {"w":[{"k":"childNo","v":e.target.value,"m":"LK"}],"o":[],"p":{"n":1,"s":10}};
+					query = JSON.stringify(query);
+					query = encodeURI(query)
+					url = '/hh/rcprochild/list?query='+query
+				}
+				
+				axios.get(url).then(res=>{
 						console.log(res)
 						if(res.status===200){
 							let lists = res.data.data.items;
@@ -58,7 +65,7 @@ class Header extends  React.Component{
 		return (
 			<div>
 				<div className="shadow"></div>
-				<input style={{color:"#fff"}} className="search box-sizing" placeholder="请输入编号" type="text" onChange={this.changeEvent} />
+				<input style={{color:"#fff"}} className="search box-sizing" placeholder="请输入编号" type="tel" onChange={this.changeEvent} />
 				<div className="container">
 					<div  className="banner">
 
