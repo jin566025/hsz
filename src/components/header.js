@@ -88,7 +88,7 @@ class Header extends  React.Component{
 						</div>
 					</div>
 				</div>
-				<div className="header-tip">捐赠2000元或3000元，资助一名贵州省黔西南州寒门学子，帮助他们克服家庭困难，顺利完成学业。</div>
+				<div className="header-tip">捐赠1000-3000元，资助一名贵州省黔西南州寒门学子，帮助他们克服家庭困难，顺利完成学业。</div>
 				<div className="split"></div>
 			</div>
 		)

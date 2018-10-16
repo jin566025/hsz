@@ -3,10 +3,11 @@ import Success from './success'
 import axios from '../axios/index'
 import $ from "jquery"
 import wx from 'weixin-jsapi'
+import html2canvas from 'html2canvas'
 class dialog extends React.Component{
 	constructor(props) {
 		super(props);
-		this.state = { dislog:false,success:false,donaername:"",number:0 };
+		this.state = { dislog:false,success:false,donaername:"",number:0,imgSrc:"" };
 		this.tabCheck = this.tabCheck.bind(this);
 		this.donation = this.donation.bind(this);
 	}
@@ -22,6 +23,19 @@ class dialog extends React.Component{
 		} else {
 			return false;
 		}
+	}
+	cutDiv(){
+		let that = this;
+
+		
+		html2canvas(document.querySelector("#success")).then((canvas) =>{
+			let src = canvas.toDataURL();
+			that.setState({
+				imgSrc:src
+			})
+		});
+ 
+		
 	}
 	aliPay(params,tel,name,address,amount,pk){
 		
@@ -39,7 +53,7 @@ class dialog extends React.Component{
 				if(res.status==="200"){
 					
 					that.checkOrder(res.data.outTradeNo,name)
-					window.location.href=res.data.qrCode
+					//window.location.href=res.data.qrCode
 				}
 			}
 		})
@@ -48,6 +62,7 @@ class dialog extends React.Component{
 		let _params = {};
 		
 		_params.cd = params.cd;
+		//_params.totalFee =parseFloat(params.totalAmount);
 		_params.totalFee =parseFloat(params.totalAmount)*100;
 		_params.phone = params.phone;
 		_params.name = params.name;
@@ -64,7 +79,8 @@ class dialog extends React.Component{
 			data:_params,
 			async:false,
 			success:function(res){
-				console.log(res)
+				
+				
 				if(res.status==="200"){
 					wx.config({
 						appId: res.data.appId, // 必填，公众号的唯一标识
@@ -81,23 +97,28 @@ class dialog extends React.Component{
 						  paySign: res.data.paySign, // 支付签名
 						  // appId:res.data.appId,
 						  success: function (result) {
-						  that.setState({
-							  success:true,
-							  donaername:params.name
-						  })
-						  
-							$.ajax({
-								type:"get",
-								url:"http://nbhh.xlylai.com/hh/rcprorecord/count?name="+params.name,
-								async:false,
-								success:function(data){
-									let _number = 0;
-									data ? _number=data:_number = 0;
-									that.setState({
-										number:_number
-									})
-								}
-							})
+							  that.setState({
+								  success:true,
+								  donaername:params.name
+							  })
+							  
+							  if(params.name){
+								  $.ajax({
+									type:"get",
+									url:"http://nbhh.xlylai.com/hh/rcprorecord/count?name="+params.name,
+									async:false,
+									success:function(data){
+										let _number = 0;
+										data ? _number=data:_number = 0;
+										
+										that.setState({
+											number:_number
+										})
+										that.cutDiv()
+									}
+								  })
+							  }
+							  that.cutDiv()
 						  }
 					  });
 
@@ -115,34 +136,47 @@ class dialog extends React.Component{
 			url:"http://nbhh.xlylai.com/hh/rcprorecord/page?query="+query,
 			async:false,
 			success:function(data){
-				
-				if(data.status==200){
-					console.log(data)
-					if(data.data.items[0]){
-						that.setState({
-							success:true,
-							donaername:name
-						})
-					}else{
-						setTimeout(()=>{
-							that.checkOrder(ordNo,name)
-						},3000)
-					}
-				}
-			}
-		})
-		$.ajax({
-			type:"get",
-			url:"http://nbhh.xlylai.com/hh/rcprorecord/count?name="+name,
-			async:false,
-			success:function(data){
-				let _number = 0;
-				data ? _number=data:_number = 0;
+				that.cutDiv()
 				that.setState({
-					number:_number
+					success:true,
+					donaername:name
 				})
+				
+				
+// 				if(data.status==200){
+// 					console.log(data)
+// 					if(data.data.items[0]){
+// 						that.cutDiv()
+// 						that.setState({
+// 							success:true,
+// 							donaername:name
+// 						})
+// 					}else{
+// 						setTimeout(()=>{
+// 							that.checkOrder(ordNo,name)
+// 						},3000)
+// 					}
+// 				}
 			}
 		})
+		if(name){
+			$.ajax({
+				type:"get",
+				url:"http://nbhh.xlylai.com/hh/rcprorecord/count?name="+name,
+				async:false,
+				success:function(data){
+					console.log(data)
+					let _number = 0;
+					data ? _number=data:_number = 0;
+					
+					that.setState({
+						number:_number
+					})
+					that.cutDiv()
+				}
+			})
+		}
+		
 	}
 
 	donation(){
@@ -157,7 +191,6 @@ class dialog extends React.Component{
 			"rcProPk":"4101218502661120",
 			"array":pk,
 		}
-		console.log()
 		let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
 		if(phoneReg.test(tel)){
 			params.phone=tel
@@ -207,7 +240,7 @@ class dialog extends React.Component{
 						
 					</div>
 				</div>
-				<Success number={this.state.number} donaername={this.state.donaername} closeDialog={()=>this.closeDialog()} success={this.state.success}></Success>
+				<Success imgSrc={this.state.imgSrc} num={this.props.pk.length } number={this.state.number} donaername={this.state.donaername} closeDialog={()=>this.closeDialog()} success={this.state.success}></Success>
 			</div>
 		)
 	}

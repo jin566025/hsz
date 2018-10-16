@@ -26,7 +26,6 @@ class detail extends React.Component{
 		return (
 			<div className="detail-content">
 				<div className="a"></div>
-				<div className="detail-title">【{this.state.details.rcProName}】</div>
 				<div className="detail-content"  dangerouslySetInnerHTML={{__html:this.state.details.des}}></div>
 			</div>
 		)

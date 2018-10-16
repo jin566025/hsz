@@ -493,18 +493,21 @@
   padding: 0.5333333333333333rem 0 0.26666666666666666rem 0;
   background-color: #fff;
   border-radius: 5px;
+	padding-top: 0.3rem;
+
 }
 .success-content .success .success-name {
   width: 8.6rem;
   margin: 0 auto;
-  font-size: 0.8rem;
+  font-size: 0.29333333333333333rem;
   margin-bottom: 0.13333333333333333rem;
+
 }
 .success-content .success .success-text {
   width: 8.6rem;
   margin: 0 auto;
-  font-size: 0.4666666666666667rem;
-  margin-bottom: 0.5333333333333333rem;
+  font-size: 0.29333333333333333rem;
+  margin-bottom: 0.1333333333333333rem;
 }
 .success-content .success .success-title {
   width: 8.6rem;
